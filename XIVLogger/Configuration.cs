@@ -4,11 +4,7 @@ using Dalamud.Plugin;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Linq;
-using Dalamud.Game.Gui;
-using Dalamud.Game;
-using Dalamud.Logging;
 
 namespace XIVLogger
 {
@@ -287,7 +283,7 @@ namespace XIVLogger
                 nameReplacements.Remove(aName);
                 nameReplacements.Add(aName, bName);
             }
-            
+
         }
 
         public void removeNameReplacement(string aName)
@@ -296,7 +292,7 @@ namespace XIVLogger
             {
                 nameReplacements.Remove(aName);
             }
-            
+
         }
 
         public void changeNameReplacement(string paName, string caName, string cbName)
@@ -308,7 +304,7 @@ namespace XIVLogger
             }
             nameReplacements.Add(caName, cbName);
         }
-        
+
 
     }
 
@@ -316,19 +312,14 @@ namespace XIVLogger
     public class ChatLog
     {
         private List<ChatMessage> log;
-        private DalamudPluginInterface pi;
-        private Configuration config;
-
-        private ChatGui chat;
+        private Configuration Config;
 
         public List<ChatMessage> Log { get => log; }
 
-        public ChatLog(Configuration aConfig, DalamudPluginInterface aPi, ChatGui aChat)
+        public ChatLog(Configuration config)
         {
             log = new List<ChatMessage>();
-            config = aConfig;
-            pi = aPi;
-            chat = aChat;
+            Config = config;
         }
 
         public void wipeLog()
@@ -375,7 +366,7 @@ namespace XIVLogger
                 Int32.TryParse(args, out lastN);
             }
 
-            printedLog = prepareLog(aLastN: lastN, aTimestamp: config.fTimestamp);
+            printedLog = prepareLog(aLastN: lastN, aTimestamp: Config.fTimestamp);
 
             if (aClipboard)
             {
@@ -389,7 +380,7 @@ namespace XIVLogger
 
                 if (lastN > 0)
                 {
-                    this.chat.PrintChat(new XivChatEntry
+                    Plugin.Chat.Print(new XivChatEntry
                     {
                         Message = $"Last {lastN} messages copied to clipboard.",
                         Type = XivChatType.Echo
@@ -397,7 +388,7 @@ namespace XIVLogger
                 }
                 else
                 {
-                    this.chat.PrintChat(new XivChatEntry
+                    Plugin.Chat.Print(new XivChatEntry
                     {
                         Message = $"Chat log copied to clipboard.",
                         Type = XivChatType.Echo
@@ -412,18 +403,18 @@ namespace XIVLogger
 
                 string folder;
 
-                if (!checkValidPath(config.filePath))
+                if (!checkValidPath(Config.filePath))
                 {
                     folder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                 }
                 else
                 {
-                    folder = config.filePath;
+                    folder = Config.filePath;
                 }
 
-                if (!string.IsNullOrEmpty(config.fileName) && !string.IsNullOrWhiteSpace(config.fileName))
+                if (!string.IsNullOrEmpty(Config.fileName) && !string.IsNullOrWhiteSpace(Config.fileName))
                 {
-                    name = replaceInvalidChars(config.fileName);
+                    name = replaceInvalidChars(Config.fileName);
                 }
 
                 string path = folder + @"\" + name + ".txt";
@@ -450,11 +441,11 @@ namespace XIVLogger
 
                 if (lastN > 0)
                 {
-                    this.chat.Print($"Last {lastN} messages saved at {path}.");
+                    Plugin.Chat.Print($"Last {lastN} messages saved at {path}.");
                 }
                 else
                 {
-                    this.chat.Print($"Chat log saved at {path}.");
+                    Plugin.Chat.Print($"Chat log saved at {path}.");
                 }
 
                 return path;
@@ -464,7 +455,7 @@ namespace XIVLogger
 
         private List<string> prepareLog(int aLastN = 0, bool aTimestamp = false, bool auto = false)
         {
-            ChatConfig activeConfig = config.activeConfig;
+            ChatConfig activeConfig = Config.activeConfig;
 
             List<string> result = new List<string>();
 
@@ -582,8 +573,8 @@ namespace XIVLogger
             // Only return the messages which have been received since the last autosave, and update the counter
             if (auto)
             {
-                result = result.Skip(config.autoMsgCounter).ToList();
-                config.autoMsgCounter += result.Count;
+                result = result.Skip(Config.autoMsgCounter).ToList();
+                Config.autoMsgCounter += result.Count;
             }
 
             return result;
@@ -591,33 +582,33 @@ namespace XIVLogger
 
         public void setupAutosave()
         {
-            config.autoFileName = getTimeStamp() + " ";
+            Config.autoFileName = getTimeStamp() + " ";
         }
 
         public void setupAutosave(string characterName)
         {
-            config.autoFileName = getTimeStamp() + " " + characterName;
+            Config.autoFileName = getTimeStamp() + " " + characterName;
         }
         public void autoSave()
         {
-            if (config.fAutosave)
+            if (Config.fAutosave)
             {
                 List<String> printedLog;
 
-                printedLog = prepareLog(aLastN: 0, aTimestamp: config.fTimestamp, true);
+                printedLog = prepareLog(aLastN: 0, aTimestamp: Config.fTimestamp, true);
 
                 string folder;
 
-                if (!checkValidPath(config.autoFilePath))
+                if (!checkValidPath(Config.autoFilePath))
                 {
                     folder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                 }
                 else
                 {
-                    folder = config.autoFilePath;
+                    folder = Config.autoFilePath;
                 }
 
-                string path = folder + @"\" + config.autoFileName + ".txt";
+                string path = folder + @"\" + Config.autoFileName + ".txt";
 
                 using (System.IO.StreamWriter file = new System.IO.StreamWriter(path, true))
                 {
@@ -627,9 +618,9 @@ namespace XIVLogger
                     }
                 }
 
-                if(config.fAutosaveNotif)
+                if(Config.fAutosaveNotif)
                 {
-                    this.chat.PrintChat(new XivChatEntry
+                    Plugin.Chat.Print(new XivChatEntry
                     {
                         Message = "Autosaved chat log to " + path + ".",
                         Type = XivChatType.Echo

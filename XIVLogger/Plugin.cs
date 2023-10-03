@@ -2,30 +2,25 @@
 using Dalamud.Game.Text;
 using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Plugin;
-using System;
 using System.Reflection;
 using ImGuiNET;
-using System.Text;
 using Dalamud.IoC;
-using Dalamud.Game.Gui;
-using Dalamud.Game;
-using Dalamud.Logging;
-using Dalamud.Game.ClientState;
+using Dalamud.Plugin.Services;
 
 namespace XIVLogger
 {
 
     public class Plugin : IDalamudPlugin
     {
-        public string Name => "XIVLogger";
-
         private const string commandName = "/xivlogger";
 
-        [PluginService] private DalamudPluginInterface PluginInterface { get; set; }
-        [PluginService] public ChatGui Chat { get; set; }
-        [PluginService] public Framework framework { get; set; }
-        [PluginService] public ClientState ClientState { get; set; }
-        private CommandManager commandManager { get; init; }
+        [PluginService] public static DalamudPluginInterface PluginInterface { get; private set; } = null!;
+        [PluginService] public static IChatGui Chat { get; private set; } = null!;
+        [PluginService] public static IFramework Framework { get; private set; } = null!;
+        [PluginService] public static IClientState ClientState { get; private set; } = null!;
+        [PluginService] public static IPluginLog Log { get; private set; }  = null!;
+        [PluginService] public static ICommandManager CommandManager { get; private set; } = null!;
+
         private Configuration configuration;
         public ChatLog log;
         private PluginUI ui;
@@ -34,66 +29,64 @@ namespace XIVLogger
 
         public string Location { get; private set; } = Assembly.GetExecutingAssembly().Location;
 
-        public Plugin(CommandManager command)
-        {            
+        public Plugin()
+        {
             this.configuration = PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
             this.configuration.Initialize(PluginInterface);
 
             this.ui = new PluginUI(this.configuration);
 
-            this.commandManager = command;
-            commandManager.AddHandler(commandName, new CommandInfo(OnCommand)
+            CommandManager.AddHandler(commandName, new CommandInfo(OnCommand)
             {
                 HelpMessage = "Opens settings window for XIVLogger"
             });
 
-            commandManager.AddHandler("/savelog", new CommandInfo(OnSaveCommand)
+            CommandManager.AddHandler("/savelog", new CommandInfo(OnSaveCommand)
             {
                 HelpMessage = "Saves a chat log as a text file with the current settings, /savelog <number> to save the last <number> messages"
             });
 
-            commandManager.AddHandler("/copylog", new CommandInfo(OnCopyCommand)
+            CommandManager.AddHandler("/copylog", new CommandInfo(OnCopyCommand)
             {
                 HelpMessage = "Copies a chat log to your clipboard with the current settings, /copylog <number> to copy the last <number> messages"
             });
 
-            this.log = new ChatLog(configuration, PluginInterface, Chat);
+            this.log = new ChatLog(configuration);
             this.ui.log = log;
 
-            this.PluginInterface.UiBuilder.Draw += DrawUI;
-            this.PluginInterface.UiBuilder.OpenConfigUi += () => DrawConfigUI();
-            this.ClientState.Login += OnLogin;
-            this.ClientState.Logout += OnLogout;
+            PluginInterface.UiBuilder.Draw += DrawUI;
+            PluginInterface.UiBuilder.OpenConfigUi += () => DrawConfigUI();
+            ClientState.Login += OnLogin;
+            ClientState.Logout += OnLogout;
             Chat.ChatMessage += OnChatMessage;
 
-            this.framework.Update += OnUpdate;
-
+            Framework.Update += OnUpdate;
         }
 
-        private void OnLogin(object sender, EventArgs e)
+        private void OnLogin()
         {
             loggingIn = true;
         }
 
-        private void OnLogout(object sender, EventArgs e)
+        private void OnLogout()
         {
             if (configuration.fAutosave && loggedIn)
             {
                 log.autoSave();
                 log.wipeLog();
             }
-            PluginLog.Debug("Logged out!");
+            Log.Debug("Logged out!");
             loggedIn = false;
         }
 
-        private void OnUpdate(Framework framework)
+        private void OnUpdate(IFramework framework)
         {
 
-            if (loggingIn && this.ClientState.LocalPlayer != null)
+            if (loggingIn && ClientState.LocalPlayer != null)
             {
                 loggingIn = false;
                 loggedIn = true;
-                log.setupAutosave(this.ClientState.LocalPlayer.Name.ToString());
+                log.setupAutosave(ClientState.LocalPlayer.Name.ToString());
             }
 
             if (configuration.fAutosave)
@@ -102,7 +95,7 @@ namespace XIVLogger
                 {
                     log.autoSave();
                     configuration.updateAutosaveTime();
-  
+
                 }
 
             }
@@ -118,14 +111,14 @@ namespace XIVLogger
         public void Dispose()
         {
 
-            commandManager.RemoveHandler(commandName);
-            commandManager.RemoveHandler("/savelog");
-            commandManager.RemoveHandler("/copylog");
-            
-            this.framework.Update -= OnUpdate;
+            CommandManager.RemoveHandler(commandName);
+            CommandManager.RemoveHandler("/savelog");
+            CommandManager.RemoveHandler("/copylog");
+
+            Framework.Update -= OnUpdate;
             Chat.ChatMessage -= OnChatMessage;
-            this.ClientState.Login -= OnLogin;
-            this.ClientState.Logout -= OnLogout;
+            ClientState.Login -= OnLogin;
+            ClientState.Logout -= OnLogout;
         }
 
         private void OnCommand(string command, string args)
