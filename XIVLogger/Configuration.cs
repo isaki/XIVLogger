@@ -16,6 +16,9 @@ namespace XIVLogger
         public string filePath = string.Empty;
         public string fileName = string.Empty;
         public bool fTimestamp = false;
+        public bool fTimeSeconds = false;
+        public bool f24hTimestamp = false;
+        public bool fDatestamp = false;
         public bool fAutosave = false;
         public bool fAutosaveNotif = true;
         public DateTime lastAutosave;
@@ -66,7 +69,8 @@ namespace XIVLogger
                     { (int) XivChatType.Echo, "Echo (Some System Messages)" },
                     { (int) XivChatType.SystemMessage, "System Messages" },
                     { (int) XivChatType.SystemError, "System Error" },
-                    { (int) XivChatType.Notice, "Notice" }
+                    { (int) XivChatType.Notice, "Notice" },
+                    { (int) XivChatType.Debug, "Debug" }
                 };
 
             if (defaultConfig == null)
@@ -188,7 +192,8 @@ namespace XIVLogger
                     { (int) XivChatType.Echo, false },
                     { (int) XivChatType.SystemMessage, false },
                     { (int) XivChatType.SystemError, false },
-                    { (int) XivChatType.Notice, false }
+                    { (int) XivChatType.Notice, false },
+                    { (int) XivChatType.Debug, false }
                 };
         }
 
@@ -235,7 +240,8 @@ namespace XIVLogger
                     { (int) XivChatType.Echo, false },
                     { (int) XivChatType.SystemMessage, false },
                     { (int) XivChatType.SystemError, false },
-                    { (int) XivChatType.Notice, false }
+                    { (int) XivChatType.Notice, false },
+                    { (int) XivChatType.Debug, false }
                 };
         }
     }
