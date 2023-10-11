@@ -84,6 +84,24 @@ public class ConfigWindow : Window, IDisposable
             if (ImGui.Checkbox("Include Timestamp", ref Plugin.Configuration.fTimestamp))
                 Plugin.Configuration.Save();
 
+            ImGui.Indent();
+            if (!Plugin.Configuration.fTimestamp) ImGui.BeginDisabled();
+            if (ImGui.Checkbox("Use 24h Time", ref Plugin.Configuration.f24hTimestamp))
+                Plugin.Configuration.Save();
+
+            ImGui.Indent();
+            if (!Plugin.Configuration.f24hTimestamp) ImGui.BeginDisabled();
+            if (ImGui.Checkbox("Show seconds", ref Plugin.Configuration.fTimeSeconds))
+                Plugin.Configuration.Save();
+            if (!Plugin.Configuration.f24hTimestamp) ImGui.EndDisabled();
+            ImGui.Unindent();
+
+            if (ImGui.Checkbox("Include Datestamp", ref Plugin.Configuration.fDatestamp))
+                Plugin.Configuration.Save();
+
+            if (!Plugin.Configuration.fTimestamp) ImGui.EndDisabled();
+            ImGui.Unindent();
+
             if (ImGui.Checkbox("Autosave", ref Plugin.Configuration.fAutosave))
             {
                 Plugin.ChatLog.SetupAutosave();

@@ -66,7 +66,7 @@ public class ChatStorage
         if (!string.IsNullOrEmpty(args))
             int.TryParse(args, out lastN);
 
-        var printedLog = PrepareLog(aLastN: lastN, aTimestamp: Config.fTimestamp);
+        var printedLog = PrepareLog(aLastN: lastN, aTimestamp: Config.fTimestamp, aTimeSeconds: Config.fTimeSeconds, a24hTimestamp: Config.f24hTimestamp, aDatestamp: Config.fDatestamp);
 
         if (aClipboard)
         {
@@ -127,7 +127,7 @@ public class ChatStorage
         return path;
     }
 
-    private List<string> PrepareLog(int aLastN = 0, bool aTimestamp = false, bool auto = false)
+    private List<string> PrepareLog(int aLastN = 0, bool aTimestamp = false, bool aTimeSeconds = false, bool a24hTimestamp = false, bool aDatestamp = false, bool auto = false)
     {
         var activeConfig = Config.activeConfig;
         var result = new List<string>();
@@ -144,7 +144,25 @@ public class ChatStorage
                     sender = replacement;
 
                 if (aTimestamp)
-                    text += $"[{message.Timestamp:t}] ";
+                {
+                    text += "[";
+                    if (aDatestamp)
+                    {
+                        text += $"{message.Timestamp:yyyy}-{message.Timestamp:MM}-{message.Timestamp:dd} ";
+                    }
+                    if (a24hTimestamp)
+                    {
+                        if (aTimeSeconds)
+                        {
+                            text += $"{message.Timestamp:HH}:{message.Timestamp:mm}:{message.Timestamp:ss}";
+                        } else {
+                            text += $"{message.Timestamp:HH}:{message.Timestamp:mm}";
+                        }
+                    } else {
+                        text += $"{message.Timestamp:t}";
+                    }
+                    text += "] ";
+                }
 
                 switch (message.Type)
                 {
@@ -217,6 +235,9 @@ public class ChatStorage
                     case XivChatType.PvPTeam:
                         text += "[PvP]" + sender + ": " + message.Message;
                         break;
+                    case XivChatType.Debug:
+                        text += "[DBG]" + message.Message;
+                        break;
                     case XivChatType.Say:
                     case XivChatType.Shout:
                     case XivChatType.Yell:
@@ -258,7 +279,7 @@ public class ChatStorage
         if (!Config.fAutosave)
             return;
 
-        var printedLog = PrepareLog(aLastN: 0, aTimestamp: Config.fTimestamp, true);
+        var printedLog = PrepareLog(aLastN: 0, aTimestamp: Config.fTimestamp, aTimeSeconds: Config.fTimeSeconds, a24hTimestamp: Config.f24hTimestamp, aDatestamp: Config.fDatestamp, true);
         var folder = !CheckValidPath(Config.autoFilePath)
             ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
             : Config.autoFilePath;
