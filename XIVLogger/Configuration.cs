@@ -24,7 +24,6 @@ namespace XIVLogger
         public DateTime lastAutosave;
         public int fAutoMin = 5;
         public string autoFilePath = string.Empty;
-        public string autoFileName = string.Empty;
 
         [NonSerialized]
         public DalamudPluginInterface PluginInterface;
@@ -79,11 +78,7 @@ namespace XIVLogger
                 activeConfig = defaultConfig;
             }
 
-            if (configList == null)
-            {
-                configList = new List<ChatConfig>();
-            }
-
+            configList ??= new List<ChatConfig>();
             SetActiveConfig(defaultConfig);
 
             Save();
@@ -111,14 +106,10 @@ namespace XIVLogger
         public void RemoveConfig(ChatConfig aConfig)
         {
             if (aConfig == defaultConfig)
-            {
                 return;
-            }
 
             if (aConfig.IsActive)
-            {
                 SetActiveConfig(defaultConfig);
-            }
 
             configList.Remove(aConfig);
         }
@@ -200,11 +191,8 @@ namespace XIVLogger
         public ChatConfig(string aName)
         {
             name = aName;
-
             isActive = false;
-
             nameReplacements = new Dictionary<string, string>();
-
             typeConfig = new Dictionary<int, bool>
                 {
                     { (int) XivChatType.Say, true },

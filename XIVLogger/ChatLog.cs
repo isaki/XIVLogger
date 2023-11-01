@@ -25,6 +25,7 @@ public class ChatStorage
     private Configuration Config;
 
     private int AutoMsgCounter;
+    private string AutoFileName = string.Empty;
 
     public ChatStorage(Configuration config)
     {
@@ -134,125 +135,123 @@ public class ChatStorage
 
         foreach (var message in LogList)
         {
-            if (activeConfig.TypeConfig.ContainsKey((int)message.Type) && activeConfig.TypeConfig[(int)message.Type])
+            if (!activeConfig.TypeConfig.ContainsKey((int)message.Type) || !activeConfig.TypeConfig[(int)message.Type])
+                continue;
+
+            var sender = message.Sender;
+            if(activeConfig.NameReplacements.TryGetValue(sender, out var replacement))
+                sender = replacement;
+
+            var text = string.Empty;
+            if (aTimestamp)
             {
-                var text = string.Empty;
-
-                var sender = message.Sender;
-
-                if(activeConfig.NameReplacements.TryGetValue(sender, out var replacement))
-                    sender = replacement;
-
-                if (aTimestamp)
+                text += "[";
+                if (aDatestamp)
                 {
-                    text += "[";
-                    if (aDatestamp)
+                    text += $"{message.Timestamp:yyyy}-{message.Timestamp:MM}-{message.Timestamp:dd} ";
+                }
+                if (a24hTimestamp)
+                {
+                    if (aTimeSeconds)
                     {
-                        text += $"{message.Timestamp:yyyy}-{message.Timestamp:MM}-{message.Timestamp:dd} ";
-                    }
-                    if (a24hTimestamp)
-                    {
-                        if (aTimeSeconds)
-                        {
-                            text += $"{message.Timestamp:HH}:{message.Timestamp:mm}:{message.Timestamp:ss}";
-                        } else {
-                            text += $"{message.Timestamp:HH}:{message.Timestamp:mm}";
-                        }
+                        text += $"{message.Timestamp:HH}:{message.Timestamp:mm}:{message.Timestamp:ss}";
                     } else {
-                        text += $"{message.Timestamp:t}";
+                        text += $"{message.Timestamp:HH}:{message.Timestamp:mm}";
                     }
-                    text += "] ";
+                } else {
+                    text += $"{message.Timestamp:t}";
                 }
-
-                switch (message.Type)
-                {
-                    case XivChatType.CustomEmote:
-                        text += sender + message.Message;
-                        break;
-                    case XivChatType.StandardEmote:
-                        text += message.Message;
-                        break;
-                    case XivChatType.TellIncoming:
-                        text += sender + " >> " + message.Message;
-                        break;
-                    case XivChatType.TellOutgoing:
-                        text += ">> " + sender + ": " + message.Message;
-                        break;
-                    case XivChatType.FreeCompany:
-                        text += "[FC]" + sender + ": " + message.Message;
-                        break;
-                    case XivChatType.NoviceNetwork:
-                        text += "[NN]" + sender + ": " + message.Message;
-                        break;
-                    case XivChatType.CrossLinkShell1:
-                        text += "[CWLS1]" + sender + ": " + message.Message;
-                        break;
-                    case XivChatType.CrossLinkShell2:
-                        text += "[CWLS2]" + sender + ": " + message.Message;
-                        break;
-                    case XivChatType.CrossLinkShell3:
-                        text += "[CWLS3]" + sender + ": " + message.Message;
-                        break;
-                    case XivChatType.CrossLinkShell4:
-                        text += "[CWLS4]" + sender + ": " + message.Message;
-                        break;
-                    case XivChatType.CrossLinkShell5:
-                        text += "[CWLS5]" + sender + ": " + message.Message;
-                        break;
-                    case XivChatType.CrossLinkShell6:
-                        text += "[CWLS6]" + sender + ": " + message.Message;
-                        break;
-                    case XivChatType.CrossLinkShell7:
-                        text += "[CWLS7]" + sender + ": " + message.Message;
-                        break;
-                    case XivChatType.CrossLinkShell8:
-                        text += "[CWLS8]" + sender + ": " + message.Message;
-                        break;
-                    case XivChatType.Ls1:
-                        text += "[LS1]" + sender + ": " + message.Message;
-                        break;
-                    case XivChatType.Ls2:
-                        text += "[LS2]" + sender + ": " + message.Message;
-                        break;
-                    case XivChatType.Ls3:
-                        text += "[LS3]" + sender + ": " + message.Message;
-                        break;
-                    case XivChatType.Ls4:
-                        text += "[LS4]" + sender + ": " + message.Message;
-                        break;
-                    case XivChatType.Ls5:
-                        text += "[LS5]" + sender + ": " + message.Message;
-                        break;
-                    case XivChatType.Ls6:
-                        text += "[LS6]" + sender + ": " + message.Message;
-                        break;
-                    case XivChatType.Ls7:
-                        text += "[LS7]" + sender + ": " + message.Message;
-                        break;
-                    case XivChatType.Ls8:
-                        text += "[LS8]" + sender + ": " + message.Message;
-                        break;
-                    case XivChatType.PvPTeam:
-                        text += "[PvP]" + sender + ": " + message.Message;
-                        break;
-                    case XivChatType.Debug:
-                        text += "[DBG]" + message.Message;
-                        break;
-                    case XivChatType.Say:
-                    case XivChatType.Shout:
-                    case XivChatType.Yell:
-                    case XivChatType.Party:
-                    case XivChatType.CrossParty:
-                    case XivChatType.Alliance:
-                        text += sender + ": " + message.Message;
-                        break;
-                    default:
-                        text += message.Message;
-                        break;
-                }
-
-                result.Add(text);
+                text += "] ";
             }
+
+            switch (message.Type)
+            {
+                case XivChatType.CustomEmote:
+                    text += sender + message.Message;
+                    break;
+                case XivChatType.StandardEmote:
+                    text += message.Message;
+                    break;
+                case XivChatType.TellIncoming:
+                    text += sender + " >> " + message.Message;
+                    break;
+                case XivChatType.TellOutgoing:
+                    text += ">> " + sender + ": " + message.Message;
+                    break;
+                case XivChatType.FreeCompany:
+                    text += "[FC]" + sender + ": " + message.Message;
+                    break;
+                case XivChatType.NoviceNetwork:
+                    text += "[NN]" + sender + ": " + message.Message;
+                    break;
+                case XivChatType.CrossLinkShell1:
+                    text += "[CWLS1]" + sender + ": " + message.Message;
+                    break;
+                case XivChatType.CrossLinkShell2:
+                    text += "[CWLS2]" + sender + ": " + message.Message;
+                    break;
+                case XivChatType.CrossLinkShell3:
+                    text += "[CWLS3]" + sender + ": " + message.Message;
+                    break;
+                case XivChatType.CrossLinkShell4:
+                    text += "[CWLS4]" + sender + ": " + message.Message;
+                    break;
+                case XivChatType.CrossLinkShell5:
+                    text += "[CWLS5]" + sender + ": " + message.Message;
+                    break;
+                case XivChatType.CrossLinkShell6:
+                    text += "[CWLS6]" + sender + ": " + message.Message;
+                    break;
+                case XivChatType.CrossLinkShell7:
+                    text += "[CWLS7]" + sender + ": " + message.Message;
+                    break;
+                case XivChatType.CrossLinkShell8:
+                    text += "[CWLS8]" + sender + ": " + message.Message;
+                    break;
+                case XivChatType.Ls1:
+                    text += "[LS1]" + sender + ": " + message.Message;
+                    break;
+                case XivChatType.Ls2:
+                    text += "[LS2]" + sender + ": " + message.Message;
+                    break;
+                case XivChatType.Ls3:
+                    text += "[LS3]" + sender + ": " + message.Message;
+                    break;
+                case XivChatType.Ls4:
+                    text += "[LS4]" + sender + ": " + message.Message;
+                    break;
+                case XivChatType.Ls5:
+                    text += "[LS5]" + sender + ": " + message.Message;
+                    break;
+                case XivChatType.Ls6:
+                    text += "[LS6]" + sender + ": " + message.Message;
+                    break;
+                case XivChatType.Ls7:
+                    text += "[LS7]" + sender + ": " + message.Message;
+                    break;
+                case XivChatType.Ls8:
+                    text += "[LS8]" + sender + ": " + message.Message;
+                    break;
+                case XivChatType.PvPTeam:
+                    text += "[PvP]" + sender + ": " + message.Message;
+                    break;
+                case XivChatType.Debug:
+                    text += "[DBG]" + message.Message;
+                    break;
+                case XivChatType.Say:
+                case XivChatType.Shout:
+                case XivChatType.Yell:
+                case XivChatType.Party:
+                case XivChatType.CrossParty:
+                case XivChatType.Alliance:
+                    text += sender + ": " + message.Message;
+                    break;
+                default:
+                    text += message.Message;
+                    break;
+            }
+
+            result.Add(text);
         }
 
         if (aLastN > 0)
@@ -270,8 +269,7 @@ public class ChatStorage
 
     public void SetupAutosave()
     {
-        Config.autoFileName = $"{GetTimeStamp()} {Plugin.ClientState.LocalPlayer?.Name.ToString() ?? "No Character"}";
-        Config.Save();
+        AutoFileName = $"{GetTimeStamp()} {Plugin.ClientState.LocalPlayer?.Name.ToString() ?? "No Character"}";
     }
 
     public void AutoSave()
@@ -284,12 +282,14 @@ public class ChatStorage
             ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
             : Config.autoFilePath;
 
-        var path = Path.Combine(folder, $"{Config.autoFileName}.txt");
-        using (var file = new StreamWriter(path, true))
-        {
-            foreach (var message in printedLog)
-                file.WriteLine(message);
-        }
+        if (!printedLog.Any())
+            return;
+
+        var path = Path.Combine(folder, $"{AutoFileName}.txt");
+
+        using var file = new StreamWriter(path, true);
+        foreach (var message in printedLog)
+            file.WriteLine(message);
 
         if (Config.fAutosaveNotif)
             Plugin.Chat.Print(new XivChatEntry { Message = $"Autosaved chat log to {path}.", Type = XivChatType.Echo });

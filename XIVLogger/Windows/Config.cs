@@ -7,13 +7,13 @@ namespace XIVLogger.Windows;
 
 public class ConfigWindow : Window, IDisposable
 {
-    private Plugin Plugin;
+    private readonly Plugin Plugin;
 
     public ConfigWindow(Plugin plugin) : base("Configuration##XIVLogger")
     {
         SizeConstraints = new WindowSizeConstraints
         {
-            MinimumSize = new Vector2(500, 330),
+            MinimumSize = new Vector2(500, 460),
             MaximumSize = new Vector2(float.MaxValue, float.MaxValue)
         };
 
@@ -38,102 +38,117 @@ public class ConfigWindow : Window, IDisposable
             ImGui.EndTabBar();
         }
 
-        if (!about)
+        if (about)
+            return;
+
+        ImGuiHelpers.ScaledDummy(5.0f);
+        ImGui.Separator();
+        ImGuiHelpers.ScaledDummy(5.0f);
+
+        if (ImGui.Button("Save Config"))
+            Plugin.Configuration.Save();
+
+        ImGui.SameLine();
+
+        if (ImGui.Button("Save Log"))
         {
-            if (ImGui.Button("Save Config"))
-                Plugin.Configuration.Save();
+            var latestLogTime = Plugin.ChatLog.PrintLog("");
+            Plugin.PluginInterface.UiBuilder.AddNotification($"Log saved at {latestLogTime}", "[XIVLogger]", NotificationType.Success);
+            Plugin.Configuration.Save();
+        }
 
-            ImGui.SameLine();
+        ImGui.SameLine();
 
-            if (ImGui.Button("Save Log"))
-            {
-                var latestLogTime = Plugin.ChatLog.PrintLog("");
-                Plugin.PluginInterface.UiBuilder.AddNotification($"Log saved at {latestLogTime}", "[XIVLogger]", NotificationType.Success);
-                Plugin.Configuration.Save();
-            }
-
-            ImGui.SameLine();
-
-            if (ImGui.Button("Copy To Clipboard"))
-            {
-                var clip = Plugin.ChatLog.PrintLog("", aClipboard: true);
-                ImGui.SetClipboardText(clip);
-                Plugin.PluginInterface.UiBuilder.AddNotification("Log copied to clipboard", "[XIVLogger]", NotificationType.Success);
-                Plugin.Configuration.Save();
-            }
+        if (ImGui.Button("Copy To Clipboard"))
+        {
+            var clip = Plugin.ChatLog.PrintLog("", aClipboard: true);
+            ImGui.SetClipboardText(clip);
+            Plugin.PluginInterface.UiBuilder.AddNotification("Log copied to clipboard", "[XIVLogger]", NotificationType.Success);
+            Plugin.Configuration.Save();
         }
     }
 
     private void GeneralTab()
     {
-        if (ImGui.BeginTabItem("Config"))
+        if (!ImGui.BeginTabItem("Config"))
+            return;
+
+        var save = false;
+        var longText = "File Name:";
+        var width = ImGui.CalcTextSize(longText).X + (25.0f * ImGuiHelpers.GlobalScale);
+
+        ImGuiHelpers.ScaledDummy(5.0f);
+
+        ImGui.AlignTextToFramePadding();
+        ImGui.Text(longText);
+        ImGui.SameLine(width);
+        ImGui.InputText("##filename", ref Plugin.Configuration.fileName, 256);
+
+        ImGui.AlignTextToFramePadding();
+        ImGui.Text("File Path:");
+        ImGui.SameLine(width);
+        ImGui.InputText("##filepath", ref Plugin.Configuration.filePath, 256);
+        ImGui.Text("Default: Documents folder");
+
+        ImGuiHelpers.ScaledDummy(5.0f);
+        ImGui.Separator();
+        ImGuiHelpers.ScaledDummy(5.0f);
+
+        save |= ImGui.Checkbox("Include Timestamp", ref Plugin.Configuration.fTimestamp);
+
+        ImGuiHelpers.ScaledIndent(10.0f);
+        if (Plugin.Configuration.fTimestamp)
         {
-            ImGui.Spacing();
+            save |= ImGui.Checkbox("Use 24h Time", ref Plugin.Configuration.f24hTimestamp);
 
-            ImGui.Text("File Name:");
-            ImGui.SameLine();
-            ImGui.InputText("##filename", ref Plugin.Configuration.fileName, 256);
-            ImGui.Spacing();
-
-            ImGui.Text("File Path:");
-            ImGui.SameLine();
-            ImGui.InputText("##filepath", ref Plugin.Configuration.filePath, 256);
-            ImGui.Text("Default: Documents folder");
-            ImGui.Spacing();
-
-            if (ImGui.Checkbox("Include Timestamp", ref Plugin.Configuration.fTimestamp))
-                Plugin.Configuration.Save();
-
-            ImGuiHelpers.ScaledIndent(5.0f);
-            if (!Plugin.Configuration.fTimestamp) ImGui.BeginDisabled();
-            if (ImGui.Checkbox("Use 24h Time", ref Plugin.Configuration.f24hTimestamp))
-                Plugin.Configuration.Save();
-
-            ImGuiHelpers.ScaledIndent(5.0f);
-            if (!Plugin.Configuration.f24hTimestamp) ImGui.BeginDisabled();
-            if (ImGui.Checkbox("Show seconds", ref Plugin.Configuration.fTimeSeconds))
-                Plugin.Configuration.Save();
-            if (!Plugin.Configuration.f24hTimestamp) ImGui.EndDisabled();
-            ImGuiHelpers.ScaledIndent(-5.0f);
-
-            if (ImGui.Checkbox("Include Datestamp", ref Plugin.Configuration.fDatestamp))
-                Plugin.Configuration.Save();
-
-            if (!Plugin.Configuration.fTimestamp) ImGui.EndDisabled();
-            ImGuiHelpers.ScaledIndent(-5.0f);
-
-            if (ImGui.Checkbox("Autosave", ref Plugin.Configuration.fAutosave))
-            {
-                Plugin.ChatLog.SetupAutosave();
-                Plugin.ChatLog.AutoSave();
-
-                Plugin.Configuration.UpdateAutosaveTime();
-                Plugin.Configuration.Save();
-            }
-
-            ImGui.Text("Every ");
-            ImGui.SameLine();
-
-            var currentAutoMin = Plugin.Configuration.fAutoMin;
-            ImGui.InputInt("##autosavemin", ref currentAutoMin, 1);
-            if (currentAutoMin != Plugin.Configuration.fAutoMin)
-            {
-                Plugin.Configuration.fAutoMin = Math.Clamp(currentAutoMin, 1, int.MaxValue);
-                Plugin.Configuration.Save();
-            }
-
-            ImGui.SameLine();
-            ImGui.Text(" minutes");
-
-            ImGui.Text("Autosave File Path:");
-            ImGui.SameLine();
-            ImGui.InputText("##autofilepath", ref Plugin.Configuration.autoFilePath, 256);
-
-            if (ImGui.Checkbox("Autosave notification echoed in chat?", ref Plugin.Configuration.fAutosaveNotif))
-                Plugin.Configuration.Save();
-
-            ImGui.EndTabItem();
+            ImGuiHelpers.ScaledIndent(10.0f);
+            if (Plugin.Configuration.f24hTimestamp)
+                save |= ImGui.Checkbox("Show seconds", ref Plugin.Configuration.fTimeSeconds);
+            ImGuiHelpers.ScaledIndent(-10.0f);
         }
+
+        save |= ImGui.Checkbox("Include Datestamp", ref Plugin.Configuration.fDatestamp);
+        ImGuiHelpers.ScaledIndent(-10.0f);
+
+        ImGuiHelpers.ScaledDummy(5.0f);
+        ImGui.Separator();
+        ImGuiHelpers.ScaledDummy(5.0f);
+
+        if (ImGui.Checkbox("Autosave", ref Plugin.Configuration.fAutosave))
+        {
+            Plugin.ChatLog.SetupAutosave();
+            Plugin.ChatLog.AutoSave();
+
+            Plugin.Configuration.UpdateAutosaveTime();
+            Plugin.Configuration.Save();
+        }
+        save |= ImGui.Checkbox("Autosave notification echoed in chat?", ref Plugin.Configuration.fAutosaveNotif);
+
+        ImGui.AlignTextToFramePadding();
+        ImGui.Text("Every");
+        ImGui.SameLine();
+
+        var currentAutoMin = Plugin.Configuration.fAutoMin;
+        ImGui.InputInt("##autosavemin", ref currentAutoMin, 1);
+        if (currentAutoMin != Plugin.Configuration.fAutoMin)
+        {
+            Plugin.Configuration.fAutoMin = Math.Clamp(currentAutoMin, 1, int.MaxValue);
+            Plugin.Configuration.Save();
+        }
+
+        ImGui.SameLine();
+        ImGui.AlignTextToFramePadding();
+        ImGui.Text("minutes");
+
+        ImGui.AlignTextToFramePadding();
+        ImGui.Text("Autosave File Path:");
+        ImGui.SameLine();
+        ImGui.InputText("##autofilepath", ref Plugin.Configuration.autoFilePath, 256);
+
+        if (save)
+            Plugin.Configuration.Save();
+
+        ImGui.EndTabItem();
     }
 
     private void ChatTypes()
