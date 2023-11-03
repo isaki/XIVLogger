@@ -35,6 +35,7 @@ public class ChatStorage
 
     public void WipeLog()
     {
+        AutoMsgCounter = 0;
         LogList = new List<ChatMessage>();
     }
 

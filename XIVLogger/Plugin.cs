@@ -90,6 +90,9 @@ public class Plugin : IDalamudPlugin
         if (!Configuration.fAutosave)
             return;
 
+        if (!ClientState.IsLoggedIn)
+            return;
+
         if (!Configuration.CheckTime())
             return;
 
