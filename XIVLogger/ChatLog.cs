@@ -21,6 +21,9 @@ public class ChatMessage
 
 public class ChatStorage
 {
+    private const string LEGACY_DATETIME_FORMAT = "dd-MM-yyyy_hh.mm.ss";
+    private const string SORTABLE_DATETIME_FORMAT = "yyyy-MM-dd_hh.mm.ss";
+
     private List<ChatMessage> LogList;
     private Configuration Config;
 
@@ -44,9 +47,22 @@ public class ChatStorage
         LogList.Add(new ChatMessage(type, sender, message));
     }
 
-    private static string GetTimeStamp()
+    private string GetTimeStamp()
     {
-        return DateTime.Now.ToString("dd-MM-yyyy_hh.mm.ss");
+        DateTime now = DateTime.Now;
+
+        string ret;
+
+        if (this.Config.fileSortableDatetime)
+        {
+            ret = now.ToString(SORTABLE_DATETIME_FORMAT, System.Globalization.CultureInfo.InvariantCulture);
+        }
+        else
+        {
+            ret = now.ToString(LEGACY_DATETIME_FORMAT, System.Globalization.CultureInfo.InvariantCulture);
+        }
+
+        return ret;
     }
 
     private static bool CheckValidPath(string path)
