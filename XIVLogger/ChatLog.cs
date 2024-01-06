@@ -5,10 +5,10 @@ namespace XIVLogger;
 
 public class ChatMessage
 {
-    public XivChatType Type;
-    public string Message;
-    public string Sender;
-    public DateTime Timestamp;
+    public XivChatType Type { get; }
+    public string Message { get; }
+    public string Sender { get; }
+    public DateTime Timestamp { get; }
 
     public ChatMessage(XivChatType type, string sender, string message)
     {
