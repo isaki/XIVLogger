@@ -24,14 +24,20 @@ public class ChatStorage
     private const string LEGACY_DATETIME_FORMAT = "dd-MM-yyyy_hh.mm.ss";
     private const string SORTABLE_DATETIME_FORMAT = "yyyy-MM-dd_hh.mm.ss";
 
+    // We never modify this reference once it is set in the constructor.
+    private readonly Configuration Config;
+
+    // This can be readonly, but it would require using Clear() to empty it.
+    // See WipeLog() for why this is not ideal.
     private List<ChatMessage> LogList;
-    private Configuration Config;
 
     private int AutoMsgCounter;
-    private string AutoFileName = string.Empty;
+    private string AutoFileName;
 
     public ChatStorage(Configuration config)
     {
+        AutoMsgCounter = 0;
+        AutoFileName = string.Empty;
         Config = config;
         LogList = new List<ChatMessage>();
     }
@@ -39,6 +45,10 @@ public class ChatStorage
     public void WipeLog()
     {
         AutoMsgCounter = 0;
+
+        // We could invoke Clear here, but, this ensures the memory is released.
+        // List is backed by an array, similar to Java's ArrayList and clearing the
+        // array does not reduce its size.
         LogList = new List<ChatMessage>();
     }
 
