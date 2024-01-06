@@ -1,4 +1,5 @@
 ﻿using Dalamud.Interface.Colors;
+using Dalamud.Interface.Components;
 using Dalamud.Interface.Internal.Notifications;
 using Dalamud.Interface.Utility;
 using Dalamud.Interface.Windowing;
@@ -13,7 +14,7 @@ public class ConfigWindow : Window, IDisposable
     {
         SizeConstraints = new WindowSizeConstraints
         {
-            MinimumSize = new Vector2(500, 460),
+            MinimumSize = new Vector2(560, 520),
             MaximumSize = new Vector2(float.MaxValue, float.MaxValue)
         };
 
@@ -94,21 +95,25 @@ public class ConfigWindow : Window, IDisposable
         ImGui.Separator();
         ImGuiHelpers.ScaledDummy(5.0f);
 
-        save |= ImGui.Checkbox("Include Timestamp", ref Plugin.Configuration.fTimestamp);
+        save |= ImGui.Checkbox("Ignore chat types", ref Plugin.Configuration.StoreEveryMessage);
+        ImGuiComponents.HelpMarker("Saves all chat messages, no matter the chat type it belongs to.");
+
+        save |= ImGui.Checkbox("Include timestamp", ref Plugin.Configuration.fTimestamp);
 
         ImGuiHelpers.ScaledIndent(10.0f);
         if (Plugin.Configuration.fTimestamp)
         {
-            save |= ImGui.Checkbox("Use 24h Time", ref Plugin.Configuration.f24hTimestamp);
+            save |= ImGui.Checkbox("Use 24h time", ref Plugin.Configuration.f24hTimestamp);
 
             ImGuiHelpers.ScaledIndent(10.0f);
             if (Plugin.Configuration.f24hTimestamp)
                 save |= ImGui.Checkbox("Show seconds", ref Plugin.Configuration.fTimeSeconds);
             ImGuiHelpers.ScaledIndent(-10.0f);
         }
-
-        save |= ImGui.Checkbox("Include Datestamp", ref Plugin.Configuration.fDatestamp);
+        save |= ImGui.Checkbox("Include datestamp", ref Plugin.Configuration.fDatestamp);
         ImGuiHelpers.ScaledIndent(-10.0f);
+
+        save |= ImGui.Checkbox("Generate sortable filenames", ref Plugin.Configuration.fileSortableDatetime);
 
         ImGuiHelpers.ScaledDummy(5.0f);
         ImGui.Separator();
@@ -144,12 +149,6 @@ public class ConfigWindow : Window, IDisposable
         ImGui.Text("Autosave File Path:");
         ImGui.SameLine();
         ImGui.InputText("##autofilepath", ref Plugin.Configuration.autoFilePath, 256);
-
-        ImGuiHelpers.ScaledDummy(5.0f);
-        ImGui.Separator();
-        ImGuiHelpers.ScaledDummy(5.0f);
-
-        save |= ImGui.Checkbox("Use sortable datetime in file names", ref Plugin.Configuration.fileSortableDatetime);
 
         if (save)
             Plugin.Configuration.Save();

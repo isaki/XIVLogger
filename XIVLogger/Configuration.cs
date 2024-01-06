@@ -24,6 +24,7 @@ namespace XIVLogger
         public DateTime lastAutosave;
         public int fAutoMin = 5;
         public string autoFilePath = string.Empty;
+        public bool StoreEveryMessage = false;
 
         // This is for file names
         public bool fileSortableDatetime = false;

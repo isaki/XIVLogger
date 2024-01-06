@@ -21,8 +21,8 @@ public class ChatMessage
 
 public class ChatStorage
 {
-    private const string LEGACY_DATETIME_FORMAT = "dd-MM-yyyy_hh.mm.ss";
-    private const string SORTABLE_DATETIME_FORMAT = "yyyy-MM-dd_hh.mm.ss";
+    private const string LegacyDatetimeFormat = "dd-MM-yyyy_hh.mm.ss";
+    private const string SortableDatetimeFormat = "yyyy-MM-dd_hh.mm.ss";
 
     // We never modify this reference once it is set in the constructor.
     private readonly Configuration Config;
@@ -59,20 +59,7 @@ public class ChatStorage
 
     private string GetTimeStamp()
     {
-        DateTime now = DateTime.Now;
-
-        string ret;
-
-        if (this.Config.fileSortableDatetime)
-        {
-            ret = now.ToString(SORTABLE_DATETIME_FORMAT, System.Globalization.CultureInfo.InvariantCulture);
-        }
-        else
-        {
-            ret = now.ToString(LEGACY_DATETIME_FORMAT, System.Globalization.CultureInfo.InvariantCulture);
-        }
-
-        return ret;
+        return DateTime.Now.ToString(Config.fileSortableDatetime ? SortableDatetimeFormat : LegacyDatetimeFormat, System.Globalization.CultureInfo.InvariantCulture);
     }
 
     private static bool CheckValidPath(string path)
@@ -162,7 +149,8 @@ public class ChatStorage
 
         foreach (var message in LogList)
         {
-            if (!activeConfig.TypeConfig.ContainsKey((int)message.Type) || !activeConfig.TypeConfig[(int)message.Type])
+            activeConfig.TypeConfig.TryGetValue((int)message.Type, out var ok);
+            if (!ok && !Config.StoreEveryMessage)
                 continue;
 
             var sender = message.Sender;
