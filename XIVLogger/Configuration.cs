@@ -50,6 +50,7 @@ namespace XIVLogger
                     { (int) XivChatType.CustomEmote, "Custom Emotes" },
                     { (int) XivChatType.StandardEmote, "Standard Emotes" },
                     { 2122, "/random" },
+                    { 8266, "other /random" },
                     { (int) XivChatType.CrossLinkShell1, "Cross Link Shell 1" },
                     { (int) XivChatType.CrossLinkShell2, "Cross Link Shell 2" },
                     { (int) XivChatType.CrossLinkShell3, "Cross Link Shell 3" },
