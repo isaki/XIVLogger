@@ -145,6 +145,12 @@ public class ConfigWindow : Window, IDisposable
         ImGui.SameLine();
         ImGui.InputText("##autofilepath", ref Plugin.Configuration.autoFilePath, 256);
 
+        ImGuiHelpers.ScaledDummy(5.0f);
+        ImGui.Separator();
+        ImGuiHelpers.ScaledDummy(5.0f);
+
+        save |= ImGui.Checkbox("Use sortable datetime in file names", ref Plugin.Configuration.fileSortableDatetime);
+
         if (save)
             Plugin.Configuration.Save();
 

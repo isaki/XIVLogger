@@ -25,6 +25,9 @@ namespace XIVLogger
         public int fAutoMin = 5;
         public string autoFilePath = string.Empty;
 
+        // This is for file names
+        public bool fileSortableDatetime = false;
+
         [NonSerialized]
         public DalamudPluginInterface PluginInterface;
 
