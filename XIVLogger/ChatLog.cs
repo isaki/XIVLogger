@@ -22,7 +22,7 @@ public class ChatMessage
 public class ChatStorage
 {
     private const string LegacyDatetimeFormat = "dd-MM-yyyy_hh.mm.ss";
-    private const string SortableDatetimeFormat = "yyyy-MM-dd_hh.mm.ss";
+    private const string SortableDatetimeFormat = "yyyy-MM-dd_HH.mm.ss";
 
     // We never modify this reference once it is set in the constructor.
     private readonly Configuration Config;
