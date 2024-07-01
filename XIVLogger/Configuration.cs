@@ -1,7 +1,5 @@
 ﻿using Dalamud.Configuration;
 using Dalamud.Game.Text;
-using Dalamud.Plugin;
-
 namespace XIVLogger
 {
     [Serializable]
@@ -29,14 +27,9 @@ namespace XIVLogger
         // This is for file names
         public bool fileSortableDatetime = false;
 
-        [NonSerialized]
-        public DalamudPluginInterface PluginInterface;
 
-
-        public void Initialize(DalamudPluginInterface pluginInterface)
+        public void Initialize()
         {
-            PluginInterface = pluginInterface;
-
             PossibleChatTypes = new Dictionary<int, string>
                 {
                     { (int) XivChatType.Say, "Say"},
@@ -83,7 +76,7 @@ namespace XIVLogger
                 activeConfig = defaultConfig;
             }
 
-            configList ??= new List<ChatConfig>();
+            configList ??= [];
             SetActiveConfig(defaultConfig);
 
             Save();
@@ -91,7 +84,7 @@ namespace XIVLogger
 
         public void Save()
         {
-            PluginInterface.SavePluginConfig(this);
+            Plugin.PluginInterface.SavePluginConfig(this);
         }
 
         public void SetActiveConfig(ChatConfig aConfig)

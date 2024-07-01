@@ -1,6 +1,6 @@
 ﻿using Dalamud.Interface.Colors;
 using Dalamud.Interface.Components;
-using Dalamud.Interface.Internal.Notifications;
+using Dalamud.Interface.ImGuiNotification;
 using Dalamud.Interface.Utility;
 using Dalamud.Interface.Windowing;
 
@@ -54,7 +54,7 @@ public class ConfigWindow : Window, IDisposable
         if (ImGui.Button("Save Log"))
         {
             var latestLogTime = Plugin.ChatLog.PrintLog("");
-            Plugin.PluginInterface.UiBuilder.AddNotification($"Log saved at {latestLogTime}", "[XIVLogger]", NotificationType.Success);
+            Plugin.Notification.AddNotification(new Notification {Content = $"Log saved at {latestLogTime}", Type = NotificationType.Success});
             Plugin.Configuration.Save();
         }
 
@@ -64,7 +64,7 @@ public class ConfigWindow : Window, IDisposable
         {
             var clip = Plugin.ChatLog.PrintLog("", aClipboard: true);
             ImGui.SetClipboardText(clip);
-            Plugin.PluginInterface.UiBuilder.AddNotification("Log copied to clipboard", "[XIVLogger]", NotificationType.Success);
+            Plugin.Notification.AddNotification(new Notification {Content = "Log copied to clipboard", Type = NotificationType.Success});
             Plugin.Configuration.Save();
         }
     }

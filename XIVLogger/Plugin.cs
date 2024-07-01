@@ -14,12 +14,12 @@ public class Plugin : IDalamudPlugin
 {
     private const string CommandName = "/xivlogger";
 
-    [PluginService] public static DalamudPluginInterface PluginInterface { get; private set; } = null!;
+    [PluginService] public static IDalamudPluginInterface PluginInterface { get; private set; } = null!;
     [PluginService] public static IChatGui Chat { get; private set; } = null!;
     [PluginService] public static IFramework Framework { get; private set; } = null!;
     [PluginService] public static IClientState ClientState { get; private set; } = null!;
-    [PluginService] public static IPluginLog Log { get; private set; }  = null!;
     [PluginService] public static ICommandManager CommandManager { get; private set; } = null!;
+    [PluginService] public static INotificationManager Notification { get; private set; } = null!;
 
     public Configuration Configuration;
     public ChatStorage ChatLog;
@@ -34,7 +34,7 @@ public class Plugin : IDalamudPlugin
     public Plugin()
     {
         Configuration = PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
-        Configuration.Initialize(PluginInterface);
+        Configuration.Initialize();
 
         ConfigWindow = new ConfigWindow(this);
         NewConfigWindow = new NewConfigWindow(this);
@@ -100,7 +100,7 @@ public class Plugin : IDalamudPlugin
         Configuration.UpdateAutosaveTime();
     }
 
-    private void OnChatMessage(XivChatType type, uint id, ref SeString sender, ref SeString message, ref bool handled)
+    private void OnChatMessage(XivChatType type, int _, ref SeString sender, ref SeString message, ref bool handled)
     {
         ChatLog.AddMessage(type, sender.TextValue, message.TextValue);
     }
