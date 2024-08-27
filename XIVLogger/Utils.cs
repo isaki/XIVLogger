@@ -6,8 +6,7 @@ public static class Utils
 {
     public static string ToChatName(this XivChatType type, string sender)
     {
-        var text = "";
-        text += type switch
+        return type switch
         {
             XivChatType.CustomEmote => $"[Emote]{sender}",
             XivChatType.StandardEmote => "[Emote]",
@@ -32,7 +31,7 @@ public static class Utils
             XivChatType.Ls7 => $"[LS7]{sender}: ",
             XivChatType.Ls8 => $"[LS8]{sender}: ",
             XivChatType.PvPTeam => $"[PvP]{sender}: ",
-            XivChatType.Debug => "[DBG] ",
+            XivChatType.Debug => "[DBG]",
             XivChatType.Say => $"[Say]{sender}: ",
             XivChatType.Shout => $"[Shout]{sender}: ",
             XivChatType.Yell => $"[Yell]{sender}: ",
@@ -40,7 +39,5 @@ public static class Utils
             XivChatType.Alliance => $"[Alliance]{sender}: ",
             _ => ""
         };
-
-        return text;
     }
 }
