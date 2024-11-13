@@ -76,7 +76,7 @@ public class Plugin : IDalamudPlugin
         ChatLog.SetupAutosave();
     }
 
-    private void OnLogout()
+    private void OnLogout(int _, int __)
     {
         if (!Configuration.fAutosave)
             return;
