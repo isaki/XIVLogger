@@ -1,5 +1,6 @@
 using System.IO;
 using Dalamud.Game.Text;
+using XIVLogger.Resources;
 
 namespace XIVLogger;
 
@@ -39,7 +40,7 @@ public class ChatStorage
         AutoMsgCounter = 0;
         AutoFileName = string.Empty;
         Config = config;
-        LogList = new List<ChatMessage>();
+        LogList = [];
     }
 
     public void WipeLog()
@@ -49,7 +50,7 @@ public class ChatStorage
         // We could invoke Clear here, but, this ensures the memory is released.
         // List is backed by an array, similar to Java's ArrayList and clearing the
         // array does not reduce its size.
-        LogList = new List<ChatMessage>();
+        LogList = [];
     }
 
     public void AddMessage(XivChatType type, string sender, string message)
@@ -97,7 +98,7 @@ public class ChatStorage
             {
                 Plugin.Chat.Print(new XivChatEntry
                 {
-                    Message = $"Last {lastN} messages copied to clipboard.",
+                    Message = string.Format(Language.ChatMessageCopyNumber, lastN),
                     Type = XivChatType.Echo
                 });
             }
@@ -105,7 +106,7 @@ public class ChatStorage
             {
                 Plugin.Chat.Print(new XivChatEntry
                 {
-                    Message = $"Chat log copied to clipboard.",
+                    Message = Language.ChatMessageCopy,
                     Type = XivChatType.Echo
                 });
             }
@@ -121,24 +122,24 @@ public class ChatStorage
         if (!string.IsNullOrEmpty(Config.fileName) && !string.IsNullOrWhiteSpace(Config.fileName))
             name = ReplaceInvalidChars(Config.fileName);
 
-        var path = folder + @"\" + name + ".txt";
+        var path = $@"{folder}\{name}.txt";
         var count = 0;
 
         while (File.Exists(path))
         {
             count++;
-            path = folder + @"\" + name + count + ".txt";
+            path = $@"{folder}\{name}{count}.txt";
         }
 
         using (var file = new StreamWriter(path, true))
         {
-            file.WriteLine(name + "\n");
+            file.WriteLine($"{name}\n");
 
             foreach (var message in printedLog)
                 file.WriteLine(message);
         }
 
-        Plugin.Chat.Print(lastN > 0 ? $"Last {lastN} messages saved at {path}." : $"Chat log saved at {path}.");
+        Plugin.Chat.Print(lastN > 0 ? string.Format(Language.ChatMessageLastCopyNumber, lastN, path) : string.Format(Language.ChatMessageLastCopy, path));
         return path;
     }
 
@@ -152,10 +153,6 @@ public class ChatStorage
             activeConfig.TypeConfig.TryGetValue((int)message.Type, out var ok);
             if (!ok && !Config.StoreEveryMessage)
                 continue;
-
-            var sender = message.Sender;
-            if(activeConfig.NameReplacements.TryGetValue(sender, out var replacement))
-                sender = replacement;
 
             var text = string.Empty;
             if (aTimestamp)
@@ -179,7 +176,7 @@ public class ChatStorage
                 text += "] ";
             }
 
-            text += $"{message.Type.ToChatName(sender)}{message.Message}";
+            text += $"{message.Type.ToChatName(message.Sender)}{message.Message}";
             result.Add(text);
         }
 
@@ -211,7 +208,7 @@ public class ChatStorage
             ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
             : Config.autoFilePath;
 
-        if (!printedLog.Any())
+        if (printedLog.Count == 0)
             return;
 
         var path = Path.Combine(folder, $"{AutoFileName}.txt");
@@ -221,6 +218,6 @@ public class ChatStorage
             file.WriteLine(message);
 
         if (Config.fAutosaveNotif)
-            Plugin.Chat.Print(new XivChatEntry { Message = $"Autosaved chat log to {path}.", Type = XivChatType.Echo });
+            Plugin.Chat.Print(new XivChatEntry { Message = string.Format(Language.ChatMessageAutosave, path), Type = XivChatType.Echo });
     }
 }

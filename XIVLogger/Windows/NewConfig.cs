@@ -1,10 +1,12 @@
-﻿using Dalamud.Interface.Windowing;
+﻿using Dalamud.Interface.Utility.Raii;
+using Dalamud.Interface.Windowing;
+using XIVLogger.Resources;
 
 namespace XIVLogger.Windows;
 
 public class NewConfigWindow : Window, IDisposable
 {
-    private Plugin Plugin;
+    private readonly Plugin Plugin;
     public ChatConfig? SelectedConfig = null;
 
     public NewConfigWindow(Plugin plugin) : base("New Configuration##XIVLogger")
@@ -24,36 +26,35 @@ public class NewConfigWindow : Window, IDisposable
     {
         if (SelectedConfig == null)
         {
-            ImGui.TextUnformatted("No config selected...");
+            ImGui.TextUnformatted(Language.NewConfigNotSelected);
             return;
         }
 
-        if (ImGui.Button("Set as Active Chat Configuration"))
+        if (ImGui.Button(Language.NewConfigSetActive))
             Plugin.Configuration.SetActiveConfig(SelectedConfig);
 
-        ImGui.Text("Config Name:");
+        ImGui.AlignTextToFramePadding();
+        ImGui.TextUnformatted(Language.NewConfigName);
         ImGui.SameLine();
         ImGui.InputText("##confname", ref SelectedConfig.name, 256);
         ImGui.Spacing();
 
-        if (ImGui.BeginTabBar("##indie tabs"))
+        using var tabBar = ImRaii.TabBar("##IndieTabs");
+        if (!tabBar.Success)
+            return;
+
+        using var tabItem = ImRaii.TabItem(Language.NewConfigChatConfig);
+        if (!tabItem.Success)
+            return;
+
+        foreach (var type in ChatTypeExtensions.PossibleTypes)
         {
-            if (ImGui.BeginTabItem("Chat Config"))
+            var enabled = SelectedConfig.TypeConfig[(int)type];
+            if (ImGui.Checkbox(type.ToFullName(), ref enabled))
             {
-                foreach (KeyValuePair<int, string> entry in Plugin.Configuration.PossibleChatTypes)
-                {
-                    var enabled = SelectedConfig.TypeConfig[entry.Key];
-                    if (ImGui.Checkbox($"{entry.Value}", ref enabled))
-                    {
-                        SelectedConfig.TypeConfig[entry.Key] = enabled;
-                        Plugin.Configuration.Save();
-                    }
-
-                }
-                ImGui.EndTabItem();
+                SelectedConfig.TypeConfig[(int)type] = enabled;
+                Plugin.Configuration.Save();
             }
-
-            ImGui.EndTabBar();
         }
     }
 }

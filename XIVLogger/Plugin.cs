@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+﻿using System.Globalization;
 using Dalamud.Game.Command;
 using Dalamud.Game.Text;
 using Dalamud.Game.Text.SeStringHandling;
@@ -6,7 +6,9 @@ using Dalamud.Plugin;
 using Dalamud.Interface.Windowing;
 using Dalamud.IoC;
 using Dalamud.Plugin.Services;
+using XIVLogger.Resources;
 using XIVLogger.Windows;
+using XIVLogger.Windows.Config;
 
 namespace XIVLogger;
 
@@ -28,13 +30,12 @@ public class Plugin : IDalamudPlugin
     private ConfigWindow ConfigWindow { get; init; }
     public NewConfigWindow NewConfigWindow { get; init; }
 
-    public static readonly string Authors = "Infi, Cadaeix";
-    public static readonly string Version = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "Unknown";
-
     public Plugin()
     {
         Configuration = PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
         Configuration.Initialize();
+
+        LanguageChanged(PluginInterface.UiLanguage);
 
         ConfigWindow = new ConfigWindow(this);
         NewConfigWindow = new NewConfigWindow(this);
@@ -58,17 +59,38 @@ public class Plugin : IDalamudPlugin
 
         ChatLog = new ChatStorage(Configuration);
 
-        PluginInterface.UiBuilder.Draw += DrawUI;
+        PluginInterface.UiBuilder.Draw += DrawUi;
         PluginInterface.UiBuilder.OpenConfigUi += OpenConfig;
 
         ClientState.Login += OnLogin;
         ClientState.Logout += OnLogout;
         Chat.ChatMessage += OnChatMessage;
+        PluginInterface.LanguageChanged += LanguageChanged;
 
         Framework.Update += OnUpdate;
 
         // Call it just to make sure a name is set, if login wasn't called
         ChatLog.SetupAutosave();
+    }
+
+    public void Dispose()
+    {
+        WindowSystem.RemoveAllWindows();
+
+        CommandManager.RemoveHandler(CommandName);
+        CommandManager.RemoveHandler("/savelog");
+        CommandManager.RemoveHandler("/copylog");
+
+        Framework.Update -= OnUpdate;
+        PluginInterface.LanguageChanged -= LanguageChanged;
+        Chat.ChatMessage -= OnChatMessage;
+        ClientState.Login -= OnLogin;
+        ClientState.Logout -= OnLogout;
+    }
+
+    private void LanguageChanged(string langCode)
+    {
+        Language.Culture = new CultureInfo(langCode);
     }
 
     private void OnLogin()
@@ -105,20 +127,6 @@ public class Plugin : IDalamudPlugin
         ChatLog.AddMessage(type, sender.TextValue, message.TextValue);
     }
 
-    public void Dispose()
-    {
-        WindowSystem.RemoveAllWindows();
-
-        CommandManager.RemoveHandler(CommandName);
-        CommandManager.RemoveHandler("/savelog");
-        CommandManager.RemoveHandler("/copylog");
-
-        Framework.Update -= OnUpdate;
-        Chat.ChatMessage -= OnChatMessage;
-        ClientState.Login -= OnLogin;
-        ClientState.Logout -= OnLogout;
-    }
-
     private void OnCommand(string command, string args)
     {
         OpenConfig();
@@ -134,6 +142,6 @@ public class Plugin : IDalamudPlugin
         ImGui.SetClipboardText(ChatLog.PrintLog(args, aClipboard: true));
     }
 
-    private void DrawUI() => WindowSystem.Draw();
+    private void DrawUi() => WindowSystem.Draw();
     private void OpenConfig() => ConfigWindow.IsOpen = true;
 }
