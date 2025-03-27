@@ -22,6 +22,7 @@ public class Plugin : IDalamudPlugin
     [PluginService] public static IClientState ClientState { get; private set; } = null!;
     [PluginService] public static ICommandManager CommandManager { get; private set; } = null!;
     [PluginService] public static INotificationManager Notification { get; private set; } = null!;
+    [PluginService] public static IPluginLog Log { get; private set; } = null!;
 
     public Configuration Configuration;
     public ChatStorage ChatLog;
@@ -70,7 +71,7 @@ public class Plugin : IDalamudPlugin
         Framework.Update += OnUpdate;
 
         // Call it just to make sure a name is set, if login wasn't called
-        ChatLog.SetupAutosave();
+        Framework.RunOnFrameworkThread(() => ChatLog.SetupAutosave());
     }
 
     public void Dispose()
