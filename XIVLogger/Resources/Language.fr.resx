@@ -1,14 +1,257 @@
-﻿<root>
-    <resheader name="resmimetype">
-        <value>text/microsoft-resx</value>
-    </resheader>
-    <resheader name="version">
-        <value>1.3</value>
-    </resheader>
-    <resheader name="reader">
-        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-    </resheader>
-    <resheader name="writer">
-        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-    </resheader>
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:element name="root" msdata:IsDataSet="true">
+
+        </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ChatTypeEmote" xml:space="preserve">
+        <value>Emote</value>
+    </data>
+  <data name="ChatTypeFC" xml:space="preserve">
+        <value>CL</value>
+    </data>
+  <data name="ChatTypeNN" xml:space="preserve">
+        <value>NN</value>
+    </data>
+  <data name="ChatTypeCWLS" xml:space="preserve">
+        <value>Linkshell Inter-monde</value>
+    </data>
+  <data name="ChatTypeLS" xml:space="preserve">
+        <value>LS</value>
+    </data>
+  <data name="ChatTypePvP" xml:space="preserve">
+        <value>JcJ</value>
+    </data>
+  <data name="ChatTypeDBG" xml:space="preserve">
+        <value>DBG</value>
+    </data>
+  <data name="ChatTypeSay" xml:space="preserve">
+        <value>Dire</value>
+    </data>
+  <data name="ChatTypeShout" xml:space="preserve">
+        <value>Hurler</value>
+    </data>
+  <data name="ChatTypeYell" xml:space="preserve">
+        <value>Crier</value>
+    </data>
+  <data name="ChatTypeParty" xml:space="preserve">
+        <value>Équipe</value>
+    </data>
+  <data name="ChatTypeAlliance" xml:space="preserve">
+        <value>Alliance</value>
+    </data>
+  <data name="FullNameSay" xml:space="preserve">
+        <value>Dire</value>
+    </data>
+  <data name="FullNameShout" xml:space="preserve">
+        <value>Hurler</value>
+    </data>
+  <data name="FullNameYell" xml:space="preserve">
+        <value>Crier</value>
+    </data>
+  <data name="FullNameParty" xml:space="preserve">
+        <value>Équipe</value>
+    </data>
+  <data name="FullNameCWParty" xml:space="preserve">
+        <value>Équipe inter-monde</value>
+    </data>
+  <data name="FullNameAlliance" xml:space="preserve">
+        <value>Alliance</value>
+    </data>
+  <data name="FullNameInTell" xml:space="preserve">
+        <value>Murmure entrant</value>
+    </data>
+  <data name="FullNameOutTell" xml:space="preserve">
+        <value>Murmure sortant</value>
+    </data>
+  <data name="FullNameCustomEmote" xml:space="preserve">
+        <value>Emotes personnalisées</value>
+    </data>
+  <data name="FullNameEmote" xml:space="preserve">
+        <value>Emotes standards</value>
+    </data>
+  <data name="FullNameYourRandom" xml:space="preserve">
+        <value>Votre /random</value>
+    </data>
+  <data name="FullNameOtherRandom" xml:space="preserve">
+        <value>/random des autres</value>
+    </data>
+  <data name="FullNameCWLS" xml:space="preserve">
+        <value>Cross Linkshell</value>
+    </data>
+  <data name="FullNameLS" xml:space="preserve">
+        <value>Linkshell</value>
+    </data>
+  <data name="FullNamePvP" xml:space="preserve">
+        <value>Équipe JcJ</value>
+    </data>
+  <data name="FullNameNN" xml:space="preserve">
+        <value>Réseau des novices</value>
+    </data>
+  <data name="FullNameFC" xml:space="preserve">
+        <value>Compagnie libre</value>
+    </data>
+  <data name="FullNameEcho" xml:space="preserve">
+        <value>Écho (certains messages système)</value>
+    </data>
+  <data name="FullNameSystemMessage" xml:space="preserve">
+        <value>Messages système</value>
+    </data>
+  <data name="FullNameSystemError" xml:space="preserve">
+        <value>Erreur système</value>
+    </data>
+  <data name="FullNameNotice" xml:space="preserve">
+        <value>Notification</value>
+    </data>
+  <data name="FullNameDebug" xml:space="preserve">
+        <value>Débogage</value>
+    </data>
+  <data name="ChatMessageCopyNumber" xml:space="preserve">
+        <value>Les {0} derniers messages ont été copiés dans le presse-papiers.</value>
+    </data>
+  <data name="ChatMessageCopy" xml:space="preserve">
+        <value>Journal de chat copié dans le presse-papiers.</value>
+    </data>
+  <data name="ChatMessageLastCopyNumber" xml:space="preserve">
+        <value>Les {0} derniers messages ont été enregistrés sur {1}.</value>
+    </data>
+  <data name="ChatMessageLastCopy" xml:space="preserve">
+        <value>Journal de chat enregistré sur {0}.</value>
+    </data>
+  <data name="ChatMessageAutosave" xml:space="preserve">
+        <value>Journal de chat enregistré automatiquement dans {0}.</value>
+    </data>
+  <data name="ButtonSaveConfig" xml:space="preserve">
+        <value>Sauvegarder la configuration</value>
+    </data>
+  <data name="ButtonSaveLog" xml:space="preserve">
+        <value>Sauvegarder le journal</value>
+    </data>
+  <data name="ButtonSaveClipboard" xml:space="preserve">
+        <value>Copier dans le presse-papier</value>
+    </data>
+  <data name="NotificationLogCopy" xml:space="preserve">
+        <value>Journal copié dans le presse-papiers</value>
+    </data>
+  <data name="NotificationLogSaved" xml:space="preserve">
+        <value>Journal enregistré sur {0}</value>
+    </data>
+  <data name="TabAbout" xml:space="preserve">
+        <value>À propos</value>
+    </data>
+  <data name="ButtonIssues" xml:space="preserve">
+        <value>Problèmes</value>
+    </data>
+  <data name="ButtonKoFi" xml:space="preserve">
+        <value>Don Ko-Fi</value>
+    </data>
+  <data name="ButtonDiscord" xml:space="preserve">
+        <value>Fil de discussion Discord</value>
+    </data>
+  <data name="AboutVersion" xml:space="preserve">
+        <value>Version :</value>
+    </data>
+  <data name="AboutDiscord" xml:space="preserve">
+        <value>Discord :</value>
+    </data>
+  <data name="TabAdvancedTooltip" xml:space="preserve">
+        <value>Configurez des configurations supplémentaires avec différentes combinaisons de types de chat ici.</value>
+    </data>
+  <data name="TabAdvanced" xml:space="preserve">
+        <value>Paramètres avancés</value>
+    </data>
+  <data name="TabAdvancedActive" xml:space="preserve">
+        <value>Actif ?</value>
+    </data>
+  <data name="TabAdvancedConfigName" xml:space="preserve">
+        <value>Nom de la configuration</value>
+    </data>
+  <data name="TabAdvancedEdit" xml:space="preserve">
+        <value>Éditer</value>
+    </data>
+  <data name="TabAdvancedRemove" xml:space="preserve">
+        <value>Supprimer</value>
+    </data>
+  <data name="TabAdvancedNewConfigName" xml:space="preserve">
+        <value>Nouvelle configuration</value>
+    </data>
+  <data name="TabChatTypes" xml:space="preserve">
+        <value>Types de chat</value>
+    </data>
+  <data name="TabChatTypesTooltip" xml:space="preserve">
+        <value>Paramètres de configuration par défaut</value>
+    </data>
+  <data name="TabSettings" xml:space="preserve">
+        <value>Paramètres</value>
+    </data>
+  <data name="TabSettingsFileName" xml:space="preserve">
+        <value>Nom du fichier :</value>
+    </data>
+  <data name="TabSettingsFilePath" xml:space="preserve">
+        <value>Chemin du fichier :</value>
+    </data>
+  <data name="TabSettingsPathTooltip" xml:space="preserve">
+        <value>Par défaut : Répertoire Documents</value>
+    </data>
+  <data name="TabSettingsIgnoreChatTypes" xml:space="preserve">
+        <value>Ignorer les types de chat</value>
+    </data>
+  <data name="TabSettingsIgnoreChatTypesTooltip" xml:space="preserve">
+        <value>Enregistre tous les messages du chat, peu importe le type de chat auquel il appartient.</value>
+    </data>
+  <data name="TabSettingsTimestamp" xml:space="preserve">
+        <value>Inclure l'horodatage</value>
+    </data>
+  <data name="TabSettingsUse24h" xml:space="preserve">
+        <value>Utiliser le format 24h</value>
+    </data>
+  <data name="TabSettingsShowSeconds" xml:space="preserve">
+        <value>Afficher les secondes</value>
+    </data>
+  <data name="TabSettingsIncludeTimestamp" xml:space="preserve">
+        <value>Inclure la date</value>
+    </data>
+  <data name="TabSettingsSortableFilenames" xml:space="preserve">
+        <value>Générer des noms de fichiers triables</value>
+    </data>
+  <data name="TabSettingsAutosave" xml:space="preserve">
+        <value>Sauvegarde automatique</value>
+    </data>
+  <data name="TabSettingsAutosaveNotification" xml:space="preserve">
+        <value>Notification de sauvegarde automatique en écho dans le chat ?</value>
+    </data>
+  <data name="TabSettingsEvery" xml:space="preserve">
+        <value>Toutes les</value>
+    </data>
+  <data name="TabSettingsMinutes" xml:space="preserve">
+        <value>minutes</value>
+    </data>
+  <data name="TabSettingsAutosavePath" xml:space="preserve">
+        <value>Chemin du fichier de sauvegarde automatique :</value>
+    </data>
+  <data name="NewConfigNotSelected" xml:space="preserve">
+        <value>Aucune configuration sélectionnée...</value>
+    </data>
+  <data name="NewConfigSetActive" xml:space="preserve">
+        <value>Définir comme configuration de chat actif</value>
+    </data>
+  <data name="NewConfigName" xml:space="preserve">
+        <value>Nom de la configuration :</value>
+    </data>
+  <data name="NewConfigChatConfig" xml:space="preserve">
+        <value>Configuration du chat</value>
+    </data>
 </root>

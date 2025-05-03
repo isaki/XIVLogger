@@ -1,14 +1,257 @@
-﻿<root>
-    <resheader name="resmimetype">
-        <value>text/microsoft-resx</value>
-    </resheader>
-    <resheader name="version">
-        <value>1.3</value>
-    </resheader>
-    <resheader name="reader">
-        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-    </resheader>
-    <resheader name="writer">
-        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-    </resheader>
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:element name="root" msdata:IsDataSet="true">
+
+        </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ChatTypeEmote" xml:space="preserve">
+        <value>Emote</value>
+    </data>
+  <data name="ChatTypeFC" xml:space="preserve">
+        <value>FG</value>
+    </data>
+  <data name="ChatTypeNN" xml:space="preserve">
+        <value>NN</value>
+    </data>
+  <data name="ChatTypeCWLS" xml:space="preserve">
+        <value>CWLS</value>
+    </data>
+  <data name="ChatTypeLS" xml:space="preserve">
+        <value>LS</value>
+    </data>
+  <data name="ChatTypePvP" xml:space="preserve">
+        <value>PvP</value>
+    </data>
+  <data name="ChatTypeDBG" xml:space="preserve">
+        <value>DBG</value>
+    </data>
+  <data name="ChatTypeSay" xml:space="preserve">
+        <value>Say</value>
+    </data>
+  <data name="ChatTypeShout" xml:space="preserve">
+        <value>Shout</value>
+    </data>
+  <data name="ChatTypeYell" xml:space="preserve">
+        <value>Yell</value>
+    </data>
+  <data name="ChatTypeParty" xml:space="preserve">
+        <value>Party</value>
+    </data>
+  <data name="ChatTypeAlliance" xml:space="preserve">
+        <value>Alliance</value>
+    </data>
+  <data name="FullNameSay" xml:space="preserve">
+        <value>Say</value>
+    </data>
+  <data name="FullNameShout" xml:space="preserve">
+        <value>Shout</value>
+    </data>
+  <data name="FullNameYell" xml:space="preserve">
+        <value>Yell</value>
+    </data>
+  <data name="FullNameParty" xml:space="preserve">
+        <value>Party</value>
+    </data>
+  <data name="FullNameCWParty" xml:space="preserve">
+        <value>Cross World Party</value>
+    </data>
+  <data name="FullNameAlliance" xml:space="preserve">
+        <value>Alliance</value>
+    </data>
+  <data name="FullNameInTell" xml:space="preserve">
+        <value>Tell Incoming</value>
+    </data>
+  <data name="FullNameOutTell" xml:space="preserve">
+        <value>Tell Outgoing</value>
+    </data>
+  <data name="FullNameCustomEmote" xml:space="preserve">
+        <value>Custom Emotes</value>
+    </data>
+  <data name="FullNameEmote" xml:space="preserve">
+        <value>Standard Emotes</value>
+    </data>
+  <data name="FullNameYourRandom" xml:space="preserve">
+        <value>Your /random</value>
+    </data>
+  <data name="FullNameOtherRandom" xml:space="preserve">
+        <value>Other /random</value>
+    </data>
+  <data name="FullNameCWLS" xml:space="preserve">
+        <value>Cross Linkshell</value>
+    </data>
+  <data name="FullNameLS" xml:space="preserve">
+        <value>Linkshell</value>
+    </data>
+  <data name="FullNamePvP" xml:space="preserve">
+        <value>PVP Team</value>
+    </data>
+  <data name="FullNameNN" xml:space="preserve">
+        <value>Novice Network</value>
+    </data>
+  <data name="FullNameFC" xml:space="preserve">
+        <value>Free Company</value>
+    </data>
+  <data name="FullNameEcho" xml:space="preserve">
+        <value>Echo (Some System Messages)</value>
+    </data>
+  <data name="FullNameSystemMessage" xml:space="preserve">
+        <value>System Messages</value>
+    </data>
+  <data name="FullNameSystemError" xml:space="preserve">
+        <value>System Error</value>
+    </data>
+  <data name="FullNameNotice" xml:space="preserve">
+        <value>Anmerkung</value>
+    </data>
+  <data name="FullNameDebug" xml:space="preserve">
+        <value>Debug</value>
+    </data>
+  <data name="ChatMessageCopyNumber" xml:space="preserve">
+        <value>Last {0} messages copied to clipboard.</value>
+    </data>
+  <data name="ChatMessageCopy" xml:space="preserve">
+        <value>Chat log copied to clipboard.</value>
+    </data>
+  <data name="ChatMessageLastCopyNumber" xml:space="preserve">
+        <value>Last {0} messages saved at {1}.</value>
+    </data>
+  <data name="ChatMessageLastCopy" xml:space="preserve">
+        <value>Chat log saved at {0}.</value>
+    </data>
+  <data name="ChatMessageAutosave" xml:space="preserve">
+        <value>Autosaved chat log to {0}.</value>
+    </data>
+  <data name="ButtonSaveConfig" xml:space="preserve">
+        <value>Save Config</value>
+    </data>
+  <data name="ButtonSaveLog" xml:space="preserve">
+        <value>Save Log</value>
+    </data>
+  <data name="ButtonSaveClipboard" xml:space="preserve">
+        <value>Copy To Clipboard</value>
+    </data>
+  <data name="NotificationLogCopy" xml:space="preserve">
+        <value>Log copied to clipboard</value>
+    </data>
+  <data name="NotificationLogSaved" xml:space="preserve">
+        <value>Log saved at {0}</value>
+    </data>
+  <data name="TabAbout" xml:space="preserve">
+        <value>About</value>
+    </data>
+  <data name="ButtonIssues" xml:space="preserve">
+        <value>Issues</value>
+    </data>
+  <data name="ButtonKoFi" xml:space="preserve">
+        <value>Ko-Fi Tip</value>
+    </data>
+  <data name="ButtonDiscord" xml:space="preserve">
+        <value>Discord Thread</value>
+    </data>
+  <data name="AboutVersion" xml:space="preserve">
+        <value>Version:</value>
+    </data>
+  <data name="AboutDiscord" xml:space="preserve">
+        <value>Discord:</value>
+    </data>
+  <data name="TabAdvancedTooltip" xml:space="preserve">
+        <value>Set up additional configurations with different combinations of chat types here.</value>
+    </data>
+  <data name="TabAdvanced" xml:space="preserve">
+        <value>Advanced Settings</value>
+    </data>
+  <data name="TabAdvancedActive" xml:space="preserve">
+        <value>Active?</value>
+    </data>
+  <data name="TabAdvancedConfigName" xml:space="preserve">
+        <value>Configuration Name</value>
+    </data>
+  <data name="TabAdvancedEdit" xml:space="preserve">
+        <value>Edit</value>
+    </data>
+  <data name="TabAdvancedRemove" xml:space="preserve">
+        <value>Entfernen</value>
+    </data>
+  <data name="TabAdvancedNewConfigName" xml:space="preserve">
+        <value>New Config</value>
+    </data>
+  <data name="TabChatTypes" xml:space="preserve">
+        <value>Chat Types</value>
+    </data>
+  <data name="TabChatTypesTooltip" xml:space="preserve">
+        <value>Default configuration settings</value>
+    </data>
+  <data name="TabSettings" xml:space="preserve">
+        <value>Settings</value>
+    </data>
+  <data name="TabSettingsFileName" xml:space="preserve">
+        <value>File Name:</value>
+    </data>
+  <data name="TabSettingsFilePath" xml:space="preserve">
+        <value>File Path:</value>
+    </data>
+  <data name="TabSettingsPathTooltip" xml:space="preserve">
+        <value>Default: Documents folder</value>
+    </data>
+  <data name="TabSettingsIgnoreChatTypes" xml:space="preserve">
+        <value>Ignore chat types</value>
+    </data>
+  <data name="TabSettingsIgnoreChatTypesTooltip" xml:space="preserve">
+        <value>Saves all chat messages, no matter the chat type it belongs to.</value>
+    </data>
+  <data name="TabSettingsTimestamp" xml:space="preserve">
+        <value>Include timestamp</value>
+    </data>
+  <data name="TabSettingsUse24h" xml:space="preserve">
+        <value>Use 24h time</value>
+    </data>
+  <data name="TabSettingsShowSeconds" xml:space="preserve">
+        <value>Show seconds</value>
+    </data>
+  <data name="TabSettingsIncludeTimestamp" xml:space="preserve">
+        <value>Include datestamp</value>
+    </data>
+  <data name="TabSettingsSortableFilenames" xml:space="preserve">
+        <value>Generate sortable filenames</value>
+    </data>
+  <data name="TabSettingsAutosave" xml:space="preserve">
+        <value>Autosave</value>
+    </data>
+  <data name="TabSettingsAutosaveNotification" xml:space="preserve">
+        <value>Autosave notification echoed in chat?</value>
+    </data>
+  <data name="TabSettingsEvery" xml:space="preserve">
+        <value>Every</value>
+    </data>
+  <data name="TabSettingsMinutes" xml:space="preserve">
+        <value>minutes</value>
+    </data>
+  <data name="TabSettingsAutosavePath" xml:space="preserve">
+        <value>Autosave File Path:</value>
+    </data>
+  <data name="NewConfigNotSelected" xml:space="preserve">
+        <value>No config selected...</value>
+    </data>
+  <data name="NewConfigSetActive" xml:space="preserve">
+        <value>Set as Active Chat Configuration</value>
+    </data>
+  <data name="NewConfigName" xml:space="preserve">
+        <value>Config Name:</value>
+    </data>
+  <data name="NewConfigChatConfig" xml:space="preserve">
+        <value>Chat Config</value>
+    </data>
 </root>
