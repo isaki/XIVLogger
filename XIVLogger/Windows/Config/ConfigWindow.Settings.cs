@@ -86,6 +86,9 @@ public partial class ConfigWindow
         ImGui.InputText("##autofilepath", ref Plugin.Configuration.autoFilePath, 256);
 
         if (save)
+        {
+            Plugin.ChatLog.SetupAutosave();
             Plugin.Configuration.Save();
+        }
     }
 }
